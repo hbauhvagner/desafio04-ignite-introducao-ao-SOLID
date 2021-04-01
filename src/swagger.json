@@ -1,0 +1,229 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Challenge Ignite introduction to SOLID Documentation",
+        "description": "This is API Introduction to SOLID",
+        "version": "1.0.0",
+        "contact": {
+            "email": "hbauhvagner@gmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["User"],
+                "summary": "Create a user",
+                "description": "Create a new user",
+                "parameters": [{
+                    "name": "Request body",
+                    "required": true,
+                    "description": "Mandatory fields for creating a user"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "User name sample",
+                                    "email": "User email sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": "208b95c3-6d9a-4960-8ade-7a3c531d721c",
+                                        "admin": false,
+                                        "name": "User name sample",
+                                        "email": "User email sample",
+                                        "created_at": "2021-03-30T04:12:26.151Z",
+                                        "updated_at": "2021-03-30T04:12:26.151Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "error": "User already exists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["User"],
+                "summary": "List all users",
+                "description": "Only `admin` user can access",
+                "parameters": [{
+                    "in": "header",
+                    "name": "user_id",
+                    "required": true,
+                    "schema": {
+                        "type": "string[$uuid]"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operation performed seccessfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": [
+                                        {
+                                            "id": "208b95c3-6d9a-4960-8ade-7a3c531d721c",
+                                            "admin": true,
+                                            "name": "User name sample",
+                                            "email": "User email sample",
+                                            "created_at": "2021-03-30T04:12:26.151Z",
+                                            "updated_at": "2021-03-30T04:12:26.151Z"
+                                        },
+                                        {
+                                            "id": "208b95c3-6d9a-4960-8ade-7a3c531d721c",
+                                            "admin": false,
+                                            "name": "User name sample",
+                                            "email": "User email sample",
+                                            "created_at": "2021-03-30T04:12:26.151Z",
+                                            "updated_at": "2021-03-30T04:12:26.151Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User without permission or User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "error": "You need to be at administrator to list all users."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["User"],
+                "summary": "Returns a specific user",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "type": "[$uuid]",
+                    "description": "User ID",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operation performed seccessfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": "208b95c3-6d9a-4960-8ade-7a3c531d721c",
+                                        "admin": false,
+                                        "name": "User name sample",
+                                        "email": "User email sample",
+                                        "created_at": "2021-03-30T04:12:26.151Z",
+                                        "updated_at": "2021-03-30T04:12:26.151Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "error": "User not found."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "Makes a user in admin",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true,
+                    "schema": {
+                        "type": "string[$uuid]"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operation performed seccessfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": "208b95c3-6d9a-4960-8ade-7a3c531d721c",
+                                        "admin": true,
+                                        "name": "User name sample",
+                                        "email": "User email sample",
+                                        "created_at": "2021-03-30T04:12:26.151Z",
+                                        "updated_at": "2021-03-30T04:12:26.151Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "error": "User not found."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
